@@ -1,5 +1,8 @@
-package com.example.demo.urls
+package com.example.demo.urls.controller
 
+import com.example.demo.urls.model.Url
+import com.example.demo.urls.datasource.UrlRepository
+import com.example.demo.urls.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -13,7 +16,8 @@ import org.springframework.context.annotation.PropertySource
 @RestController
 @RequestMapping("")
 class ShortenedUrlController(
-    @Autowired private val urlRepository: UrlRepository) {
+    @Autowired private val urlRepository: UrlRepository
+) {
 
     @Autowired
     lateinit var appConfiguration: AppConfiguration

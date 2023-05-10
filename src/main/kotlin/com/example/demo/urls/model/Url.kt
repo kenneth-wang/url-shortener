@@ -1,4 +1,4 @@
-package com.example.demo.urls
+package com.example.demo.urls.model
 
 import javax.persistence.*
 

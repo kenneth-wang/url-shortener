@@ -1,5 +1,7 @@
-package com.example.demo.urls
+package com.example.demo.urls.service
 
+import com.example.demo.urls.datasource.UrlRepository
+import com.example.demo.urls.model.Url
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.ZoneOffset
