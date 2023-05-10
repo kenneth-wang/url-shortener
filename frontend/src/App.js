@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import './App.css';
 
 function HomePage() {
   return (
-    <div>
+    <div className="container">
       <h1>Welcome to the URL Shortener!</h1>
       <p>Get started by clicking <Link to="/shorten-url">here</Link></p>
     </div>
@@ -23,7 +24,7 @@ function ShortenUrlPage() {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>URL Shortener</h1>
       <form onSubmit={handleSubmit}>
         <label>
