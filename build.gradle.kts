@@ -24,6 +24,7 @@ dependencies {
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("io.mockk:mockk:1.10.4")
 }
 
 tasks.withType<KotlinCompile> {

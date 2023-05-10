@@ -1,7 +1,6 @@
 package com.example.demo.urls.controller
 
 import com.example.demo.urls.model.Url
-import com.example.demo.urls.datasource.UrlRepository
 import com.example.demo.urls.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -16,7 +15,7 @@ import org.springframework.context.annotation.PropertySource
 @RestController
 @RequestMapping("")
 class ShortenedUrlController(
-    @Autowired private val urlRepository: UrlRepository
+    private val service: UrlService
 ) {
 
     @Autowired
@@ -24,26 +23,26 @@ class ShortenedUrlController(
 
     //get url by shortUrl
     @GetMapping("/{shortUrl}")
-    fun redirect(@PathVariable shortUrl: String, response: HttpServletResponse): ResponseEntity<Unit> {
-        val url = urlRepository.findByShortUrl("${appConfiguration.baseBackendUrl}/$shortUrl")
-        if (url != null) {
+    fun redirect(@PathVariable shortUrl: String, response: HttpServletResponse): ResponseEntity<String> {
+        val url = service.getUrlByShortUrl("${appConfiguration.baseBackendUrl}/$shortUrl")
+        return if (url != null) {
             response.sendRedirect(url.originalUrl)
             return ResponseEntity(HttpStatus.OK)
+        } else {
+            ResponseEntity(HttpStatus.NOT_FOUND)
         }
-
-        return ResponseEntity(HttpStatus.NOT_FOUND)
     }
 }
 
 
 @RestController
 @RequestMapping("/api/urls")
-class UrlController(@Autowired private val urlRepository: UrlRepository, val urlService: UrlService){
+class UrlController(@Autowired private val urlService: UrlService){
 
     //get all urls
     @GetMapping("")
     fun getAllUrls(): List<Url> =
-        urlRepository.findAll().toList()
+        urlService.getUrls().toList()
 
     //create url
     @PostMapping("")
@@ -56,22 +55,19 @@ class UrlController(@Autowired private val urlRepository: UrlRepository, val url
     //get url by id
     @GetMapping("/{id}")
     fun getUrlById(@PathVariable("id") urlId: Int): ResponseEntity<Url> {
-        val url = urlRepository.findById(urlId).orElse(null)
-        return if (url != null) {
-            ResponseEntity(url, HttpStatus.OK)
-        } else {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+        val url = urlService.getUrl(urlId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        return ResponseEntity(url, HttpStatus.OK)
     }
 
     //delete url
     @DeleteMapping("/{id}")
     fun deletedUrlById(@PathVariable("id") urlId: Int): ResponseEntity<Url> {
-        if (!urlRepository.existsById(urlId)){
+        if (!urlService.exists(urlId)) {
             return ResponseEntity(HttpStatus.NOT_FOUND)
         }
 
-        urlRepository.deleteById(urlId)
+        urlService.deleteUrl(urlId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }
