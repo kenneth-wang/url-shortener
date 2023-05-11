@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 
+ENV SPRING_PROFILES_ACTIVE = "database"
+
 # Build the app
 RUN ./gradlew clean build -x test
 
