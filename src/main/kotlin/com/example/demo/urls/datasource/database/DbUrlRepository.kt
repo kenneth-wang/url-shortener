@@ -4,7 +4,6 @@ import com.example.demo.urls.model.Url
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
 
 interface UrlCrudRepository : CrudRepository<Url, Int> {
     fun findByOriginalUrl(originalUrl: String): Url?

@@ -21,14 +21,20 @@ internal class MockUrlRepositoryTest {
     fun retrieveUrl() {
         val url = mockUrlRepository.retrieveUrl(1)
 
-        assertEquals(Url(1, "http://localhost:8080/1", "http://localhost:8080/DNVIHZn"), url)
+        assertEquals(
+            Url(1, "http://localhost:8080/1", "http://localhost:8080/DNVIHZn"),
+            url
+        )
     }
 
     @Test
     fun retrieveByShortUrl() {
         val url = mockUrlRepository.retrieveByShortUrl("http://localhost:8080/DNVIHZn")
 
-        assertEquals(Url(1, "http://localhost:8080/1", "http://localhost:8080/DNVIHZn"), url)
+        assertEquals(
+            Url(1, "http://localhost:8080/1", "http://localhost:8080/DNVIHZn"),
+            url
+        )
     }
 
     @Test

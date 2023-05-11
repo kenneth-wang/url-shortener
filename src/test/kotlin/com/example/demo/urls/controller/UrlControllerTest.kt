@@ -1,10 +1,8 @@
 package com.example.demo.urls.controller
 
-import com.example.demo.urls.model.Url
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,9 +14,11 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.test.context.ActiveProfiles
+
 import com.example.demo.urls.datasource.UrlRepository
 import com.example.demo.urls.datasource.mock.MockUrlRepository
-import org.springframework.test.context.ActiveProfiles
+
 
 @TestConfiguration
 class UrlControllerTestConfiguration {
@@ -33,7 +33,6 @@ class UrlControllerTestConfiguration {
 @AutoConfigureMockMvc
 class UrlControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
-    val objectMapper: ObjectMapper
 ) {
 
     @Test

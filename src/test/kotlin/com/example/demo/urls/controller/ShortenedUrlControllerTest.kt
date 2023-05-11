@@ -20,10 +20,11 @@ class ShortenedUrlControllerTest @Autowired constructor(
     @Test
     fun redirect() {
         val shortUrlSuffix = "DNVIHZn"
+        val expectedRedirectedUrl = "http://localhost:8080/1"
         mockMvc.get("/$shortUrlSuffix")
             .andExpect {
                 status { is3xxRedirection() }
-                redirectedUrl("http://localhost:8080/1")
+                redirectedUrl(expectedRedirectedUrl)
             }
     }
 }
