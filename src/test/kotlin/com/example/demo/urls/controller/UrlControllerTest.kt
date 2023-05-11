@@ -50,15 +50,17 @@ class UrlControllerTest @Autowired constructor(
     @Test
     @DirtiesContext
     fun createUrl() {
-        val newUrl = Url(id=4, originalUrl="http://localhost:8080")
+        val json = """{"originalUrl": "http://localhost:8080"}"""
         mockMvc.post("/api/urls/") {
             contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(newUrl)
+            content = json
         }
             .andExpect {
                 status { isCreated() }
                 content { contentType(MediaType.APPLICATION_JSON) }
                 jsonPath("$.id") { value(4) }
+                jsonPath("$.originalUrl") { value("http://localhost:8080") }
+                jsonPath("$.shortUrl") { value("http://localhost:8080/<shortenedUrl>") }
             }
     }
 

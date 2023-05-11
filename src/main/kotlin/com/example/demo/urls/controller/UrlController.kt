@@ -1,26 +1,22 @@
 package com.example.demo.urls.controller
 
+import com.example.demo.urls.configuration.AppConfiguration
 import com.example.demo.urls.model.Url
 import com.example.demo.urls.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
-
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @RestController
 @RequestMapping("")
 class ShortenedUrlController(
-    private val service: UrlService
+    private val service: UrlService,
+    private val appConfiguration: AppConfiguration
 ) {
-
-    @Autowired
-    lateinit var appConfiguration: AppConfiguration
-
     //get url by shortUrl
     @GetMapping("/{shortUrl}")
     fun redirect(@PathVariable shortUrl: String, response: HttpServletResponse): ResponseEntity<String> {
@@ -34,7 +30,6 @@ class ShortenedUrlController(
     }
 }
 
-
 @RestController
 @RequestMapping("/api/urls")
 class UrlController(@Autowired private val urlService: UrlService){
@@ -47,8 +42,7 @@ class UrlController(@Autowired private val urlService: UrlService){
     //create url
     @PostMapping("")
     fun createUrl(@RequestBody url: Url): ResponseEntity<Url> {
-        val shortUrl = urlService.shortenUrl(url.originalUrl)
-        val newUrl = url.copy(shortUrl=shortUrl)
+        val newUrl = urlService.shortenUrl(url, LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli())
         return ResponseEntity(newUrl, HttpStatus.CREATED)
     }
 
@@ -73,10 +67,3 @@ class UrlController(@Autowired private val urlService: UrlService){
 }
 
 
-@Configuration
-@PropertySource("classpath:application.yml")
-class AppConfiguration {
-
-    @Value("\${baseBackendUrl}")
-    lateinit var baseBackendUrl: String
-}

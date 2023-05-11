@@ -1,17 +1,22 @@
 package com.example.demo.urls.service
 
+import com.example.demo.urls.configuration.AppConfiguration
 import com.example.demo.urls.datasource.UrlRepository
 import com.example.demo.urls.model.Url
 import org.junit.jupiter.api.Test
 
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.test.annotation.DirtiesContext
 
 class UrlServiceTest {
 
     private val urlRepository: UrlRepository = mockk(relaxed = true)
-    private val urlService = UrlService(urlRepository)
+    private val appConfiguration = AppConfiguration().apply {
+        baseBackendUrl = "http://localhost:8080"
+    }
+    private val urlService = UrlService(urlRepository, appConfiguration)
 
     @Test
     fun getUrls() {
@@ -34,7 +39,11 @@ class UrlServiceTest {
     @Test
     fun addUrl() {
         urlService.addUrl(Url(4, "http://localhost:8080/4", "http://localhost:8080/<shortened_url>"))
-        verify(exactly=1) { urlRepository.createUrl(Url(4, "http://localhost:8080/4", "http://localhost:8080/<shortened_url>")) }
+        verify(exactly=1) {
+            urlRepository.createUrl(
+                Url(4, "http://localhost:8080/4", "http://localhost:8080/<shortened_url>")
+            )
+        }
     }
 
     @Test
@@ -46,7 +55,7 @@ class UrlServiceTest {
     @Test
     @DirtiesContext
     fun shortenUrl() {
-        urlService.shortenUrl("http://localhost:8080")
+        urlService.shortenUrl(Url(4, "http://localhost:8080", null), 1683803574249)
         verify(exactly=1) { urlRepository.retrieveByOriginalUrl("http://localhost:8080")}
     }
 
@@ -54,5 +63,13 @@ class UrlServiceTest {
     fun exists() {
         urlService.exists(1)
         verify(exactly=1) { urlRepository.exists(1) }
+    }
+
+    @Test
+    fun generateShortUrl() {
+        val num = 1683803574249
+        val expectedShortUrl = "http://localhost:8080/DN6SmDt"
+        val actualShortUrl = urlService.generateShortUrl(num)
+        assertEquals(expectedShortUrl, actualShortUrl)
     }
 }

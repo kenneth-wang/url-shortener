@@ -1,14 +1,15 @@
 package com.example.demo.urls.service
 
+import com.example.demo.urls.configuration.AppConfiguration
 import com.example.demo.urls.datasource.UrlRepository
 import com.example.demo.urls.model.Url
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+
 
 @Service
 class UrlService (
-    private val urlRepository: UrlRepository
+    private val urlRepository: UrlRepository,
+    private val appConfiguration: AppConfiguration
 ) {
 
     fun getUrls(): Collection<Url> = urlRepository.retrieveUrls()
@@ -23,36 +24,32 @@ class UrlService (
 
     fun exists(id: Int): Boolean = urlRepository.exists(id)
 
-    fun  shortenUrl(originalUrl: String): String? {
-        val existingUrl = urlRepository.retrieveByOriginalUrl(originalUrl)
+    fun shortenUrl(url: Url, num: Long): Url {
+        val existingUrl = urlRepository.retrieveByOriginalUrl(url.originalUrl)
 
         if (existingUrl != null) {
-            return existingUrl.shortUrl
+            return existingUrl
         }
 
-        val shortUrl = generateShortUrl()
-        val url = Url(id=null, shortUrl=shortUrl, originalUrl=originalUrl)
-        urlRepository.createUrl(url)
+        val shortUrl = generateShortUrl(num)
+        val newUrl = url.copy(shortUrl=shortUrl)
 
-        return shortUrl
+        return urlRepository.createUrl(newUrl)
     }
 
-    private fun generateShortUrl(): String {
-        val alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        val base = alphabet.length
-        // Use Companion object to convert variables to constants
-        // https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html
-        var num: Long = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
+    companion object {
+        private const val ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        private const val BASE = ALPHABET.length
+    }
+    fun generateShortUrl(num: Long): String {
         val sb = StringBuilder()
 
-        while (num > 0) {
-            sb.append(alphabet[(num % base).toInt()])
-            num /= base
+        var n = num
+        while (n > 0) {
+            sb.append(ALPHABET[(n % BASE).toInt()])
+            n /= BASE
         }
 
-        val baseUrl = "http://localhost:8080"
-        val subUrl = sb.reverse().toString()
-        return "$baseUrl/$subUrl"
+        return "${appConfiguration.baseBackendUrl}/${sb.reverse()}"
     }
-
 }

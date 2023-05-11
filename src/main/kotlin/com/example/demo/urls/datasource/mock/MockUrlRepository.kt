@@ -1,6 +1,5 @@
 package com.example.demo.urls.datasource.mock
 
-import org.springframework.stereotype.Repository
 import com.example.demo.urls.datasource.UrlRepository
 import com.example.demo.urls.model.Url
 import org.springframework.context.annotation.Profile
@@ -29,9 +28,10 @@ class MockUrlRepository : UrlRepository {
         if (urls.any { it.id == url.id }) {
             throw IllegalArgumentException("Url with id ${url.id} already exists.")
         }
-        urls.add(url)
+        val newUrl = url.copy(id=4, shortUrl="http://localhost:8080/<shortenedUrl>")
+        urls.add(newUrl)
 
-        return url
+        return newUrl
     }
 
     override fun deleteUrl(id: Int) {
