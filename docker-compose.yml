@@ -17,6 +17,7 @@ services:
       DB_URL: jdbc:postgresql://db:5432/postgres
       PG_USER: postgres
       PG_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: database
     depends_on:
       - db
   db:
