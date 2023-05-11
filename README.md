@@ -13,6 +13,9 @@
 4. You will see a shortened URL.
 5. Click on the shortened URL and be redirected to the website you have given in `step #3`.
 
+Here is an illustrated view of the whole process
+![](demo.gif)
+
 ## Deployment to AWS
 The web app is deployed on a public AWS EC2 server with Docker Compose. The deployment steps are documented as follows:
 
