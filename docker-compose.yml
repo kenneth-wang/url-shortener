@@ -30,5 +30,17 @@ services:
       POSTGRES_USERNAME: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
+  react-frontend:
+    container_name: react-frontend
+    image: react-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:3000"
+    environment:
+      DANGEROUSLY_DISABLE_HOST_CHECK: true
+    depends_on:
+      - kotlin-app
 volumes:
   pg-data: {}
