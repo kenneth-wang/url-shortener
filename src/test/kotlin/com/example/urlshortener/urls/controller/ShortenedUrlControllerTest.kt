@@ -1,4 +1,4 @@
-package com.example.demo.urls.controller
+package com.example.urlshortener.urls.controller
 
 import org.junit.jupiter.api.Test
 

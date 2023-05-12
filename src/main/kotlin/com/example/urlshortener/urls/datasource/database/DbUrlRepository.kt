@@ -1,6 +1,6 @@
-package com.example.demo.urls.datasource
+package com.example.urlshortener.urls.datasource
 
-import com.example.demo.urls.model.Url
+import com.example.urlshortener.urls.model.Url
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.data.repository.CrudRepository

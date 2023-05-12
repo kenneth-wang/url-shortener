@@ -1,7 +1,7 @@
-package com.example.demo.urls.controller
+package com.example.urlshortener.urls.controller
 
-import com.example.demo.urls.configuration.AppConfiguration
-import com.example.demo.urls.service.UrlService
+import com.example.urlshortener.urls.configuration.AppConfiguration
+import com.example.urlshortener.urls.service.UrlService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

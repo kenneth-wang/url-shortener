@@ -1,7 +1,7 @@
-package com.example.demo.urls.controller
+package com.example.urlshortener.urls.controller
 
-import com.example.demo.urls.model.Url
-import com.example.demo.urls.service.UrlService
+import com.example.urlshortener.urls.model.Url
+import com.example.urlshortener.urls.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

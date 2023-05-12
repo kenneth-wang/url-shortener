@@ -1,4 +1,4 @@
-package com.example.demo.urls.controller
+package com.example.urlshortener.urls.controller
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
@@ -16,8 +16,8 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ActiveProfiles
 
-import com.example.demo.urls.datasource.UrlRepository
-import com.example.demo.urls.datasource.mock.MockUrlRepository
+import com.example.urlshortener.urls.datasource.UrlRepository
+import com.example.urlshortener.urls.datasource.mock.MockUrlRepository
 
 
 @TestConfiguration

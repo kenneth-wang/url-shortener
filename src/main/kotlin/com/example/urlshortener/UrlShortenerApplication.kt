@@ -1,14 +1,14 @@
-package com.example.demo
+package com.example.urlshortener
 
-import com.example.demo.configuration.UrlRepositoryConfiguration
+import com.example.urlshortener.configuration.UrlRepositoryConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
 @SpringBootApplication
 @Import(UrlRepositoryConfiguration::class)
-class DemoApplication
+class UrlShortenerApplication
 
 fun main(args: Array<String>) {
-	runApplication<DemoApplication>(*args)
+	runApplication<UrlShortenerApplication>(*args)
 }

@@ -1,4 +1,4 @@
-package com.example.demo.urls.model
+package com.example.urlshortener.urls.model
 
 import javax.persistence.*
 

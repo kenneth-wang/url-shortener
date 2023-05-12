@@ -1,6 +1,6 @@
-package com.example.demo.urls.datasource.mock
+package com.example.urlshortener.urls.datasource.mock
 
-import com.example.demo.urls.model.Url
+import com.example.urlshortener.urls.model.Url
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*

@@ -1,7 +1,7 @@
-package com.example.demo.urls.datasource.mock
+package com.example.urlshortener.urls.datasource.mock
 
-import com.example.demo.urls.datasource.UrlRepository
-import com.example.demo.urls.model.Url
+import com.example.urlshortener.urls.datasource.UrlRepository
+import com.example.urlshortener.urls.model.Url
 import org.springframework.context.annotation.Profile
 
 @Profile("test")

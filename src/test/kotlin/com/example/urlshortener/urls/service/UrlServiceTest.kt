@@ -1,8 +1,8 @@
-package com.example.demo.urls.service
+package com.example.urlshortener.urls.service
 
-import com.example.demo.urls.configuration.AppConfiguration
-import com.example.demo.urls.datasource.UrlRepository
-import com.example.demo.urls.model.Url
+import com.example.urlshortener.urls.configuration.AppConfiguration
+import com.example.urlshortener.urls.datasource.UrlRepository
+import com.example.urlshortener.urls.model.Url
 import org.junit.jupiter.api.Test
 
 import io.mockk.mockk

@@ -1,9 +1,9 @@
-package com.example.demo.configuration
+package com.example.urlshortener.configuration
 
-import com.example.demo.urls.datasource.DbUrlRepository
-import com.example.demo.urls.datasource.UrlCrudRepository
-import com.example.demo.urls.datasource.UrlRepository
-import com.example.demo.urls.datasource.mock.MockUrlRepository
+import com.example.urlshortener.urls.datasource.DbUrlRepository
+import com.example.urlshortener.urls.datasource.UrlCrudRepository
+import com.example.urlshortener.urls.datasource.UrlRepository
+import com.example.urlshortener.urls.datasource.mock.MockUrlRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile

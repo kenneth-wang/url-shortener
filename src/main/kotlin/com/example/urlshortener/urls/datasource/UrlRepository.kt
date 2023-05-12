@@ -1,6 +1,6 @@
-package com.example.demo.urls.datasource
+package com.example.urlshortener.urls.datasource
 
-import com.example.demo.urls.model.Url
+import com.example.urlshortener.urls.model.Url
 
 interface UrlRepository {
 
