@@ -12,6 +12,11 @@ class UrlService (
     private val appConfiguration: AppConfiguration
 ) {
 
+    companion object {
+        private const val ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        private const val BASE = ALPHABET.length
+    }
+
     fun getUrls(): Collection<Url> = urlRepository.retrieveUrls()
 
     fun getUrl(id: Int): Url? = urlRepository.retrieveUrl(id)
@@ -37,10 +42,6 @@ class UrlService (
         return urlRepository.createUrl(newUrl)
     }
 
-    companion object {
-        private const val ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        private const val BASE = ALPHABET.length
-    }
     fun generateShortUrl(num: Long): String {
         val sb = StringBuilder()
 
