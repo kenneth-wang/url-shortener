@@ -8,6 +8,6 @@ import org.springframework.context.annotation.PropertySource
 @PropertySource("classpath:application.yml")
 class AppConfiguration {
 
-    @Value("\${spring.baseBackendUrl}")
+    @Value("\${baseBackendUrl}")
     lateinit var baseBackendUrl: String
 }
