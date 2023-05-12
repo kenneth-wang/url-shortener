@@ -1,34 +1,13 @@
 package com.example.demo.urls.controller
 
-import com.example.demo.urls.configuration.AppConfiguration
 import com.example.demo.urls.model.Url
 import com.example.demo.urls.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletResponse
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-
-@RestController
-@RequestMapping("")
-class ShortenedUrlController(
-    private val service: UrlService,
-    private val appConfiguration: AppConfiguration
-) {
-    //get url by shortUrl
-    @GetMapping("/{shortUrl}")
-    fun redirect(@PathVariable shortUrl: String, response: HttpServletResponse): ResponseEntity<String> {
-        val url = service.getUrlByShortUrl("${appConfiguration.baseBackendUrl}/$shortUrl")
-        return if (url != null) {
-            response.sendRedirect(url.originalUrl)
-            return ResponseEntity(HttpStatus.OK)
-        } else {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
-    }
-}
 
 @RestController
 @RequestMapping("/api/urls")
