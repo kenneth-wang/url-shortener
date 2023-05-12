@@ -16,8 +16,19 @@
 Here is an illustrated view of the whole process
 ![](demo.gif)
 
-## Deployment to AWS
-The web app is deployed on a public AWS EC2 server with Docker Compose. The deployment steps are documented as follows:
+## Steps to run locally
+- Clone the repository
+    ```shell
+        git clone https://github.com/kenneth-wang/url-shortener.git
+    ```
+- Start the app by running the following commands
+    ```sh
+    cd url-shortener
+    docker-compose up --build
+    ```
+
+## Steps to deploy on AWS EC2
+The deployment steps are documented as follows:
 
 - Run the following commands to install Docker-compose/Docker/Git. Restart the server. 
     ```shell
@@ -31,44 +42,9 @@ The web app is deployed on a public AWS EC2 server with Docker Compose. The depl
     ```shell
         git clone https://github.com/kenneth-wang/url-shortener.git
     ```
-- Create the following `application.yml` under `src/main/resources/`
-  ```.yaml
-        spring:
-            profiles:
-                active: mock
-            datasource:
-                url: jdbc:postgresql://db:5432/postgres
-                password: postgres
-                username: postgres
-                schema: classpath:/sql/schema.sql
-            jpa:
-                hibernate:
-                    ddl-auto: update
-            properties:
-                hibernate:
-                    dialect: org.hibernate.dialect.PostgreSQLDialect
-            baseBackendUrl: http://localhost:8080
-        ---
-        
-        spring:
-            profiles:
-                active: database
-            datasource:
-                url: jdbc:postgresql://db:5432/postgres
-                password: postgres
-                username: postgres
-                schema: classpath:/sql/schema.sql
-            jpa:
-                hibernate:
-                    ddl-auto: update
-            properties:
-                hibernate:
-                    dialect: org.hibernate.dialect.PostgreSQLDialect
-            baseBackendUrl: <Your public server's DNS>
-  ``` 
 - Set these two fields to your public server's DNS:
   - `proxy` under `./frontend/package.json`
-  - `spring.baseBackendUrl` under `src/main/resources/application.yml`
+  - `baseBackendUrl` under `src/main/resources/application.yml`
 - Start the app by running the following commands
     ```sh
     cd url-shortener
