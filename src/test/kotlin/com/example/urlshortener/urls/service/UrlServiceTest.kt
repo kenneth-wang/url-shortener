@@ -3,6 +3,8 @@ package com.example.urlshortener.urls.service
 import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.datasource.UrlRepository
 import com.example.urlshortener.urls.model.Url
+import com.example.urlshortener.urls.utils.ShortenAlgorithm
+import io.mockk.every
 import org.junit.jupiter.api.Test
 
 import io.mockk.mockk
@@ -15,6 +17,7 @@ class UrlServiceTest {
     private val urlRepository: UrlRepository = mockk(relaxed = true)
     private val appConfiguration = AppConfiguration().apply {
         baseBackendUrl = "http://localhost:8080"
+        shortenAlgorithm = "RandomAlgorithm"
     }
     private val urlService = UrlService(urlRepository, appConfiguration)
 
@@ -55,8 +58,19 @@ class UrlServiceTest {
     @Test
     @DirtiesContext
     fun shortenUrl() {
-        urlService.shortenUrl(Url(4, "http://localhost:8080", null), 1683803574249)
+        val num = 1683803574249
+        val shortenAlgorithm = mockk<ShortenAlgorithm>()
+
+        every { urlRepository.retrieveByOriginalUrl("http://localhost:8080") } returns null
+        every { shortenAlgorithm.generateShortenedUrl(num) } returns "http://localhost:8080/shortened-url"
+
+        // create a new instance of UrlService that uses the mock ShortenAlgorithm
+        val urlService = UrlService(urlRepository, appConfiguration)
+
+        urlService.shortenUrl(Url(4, "http://localhost:8080", null), num, shortenAlgorithm)
+
         verify(exactly=1) { urlRepository.retrieveByOriginalUrl("http://localhost:8080")}
+        verify(exactly=1) { shortenAlgorithm.generateShortenedUrl(num) }
     }
 
     @Test

@@ -9,4 +9,5 @@ class AppConfiguration {
 
     @Value("\${baseBackendUrl}")
     lateinit var baseBackendUrl: String
+    var shortenAlgorithm: String = "RandomAlgorithm"
 }

@@ -1,7 +1,11 @@
 package com.example.urlshortener.urls.controller
 
+import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.model.Url
 import com.example.urlshortener.urls.service.UrlService
+import com.example.urlshortener.urls.utils.Base62Algorithm
+import com.example.urlshortener.urls.utils.RandomAlgorithm
+import com.example.urlshortener.urls.utils.ShortenAlgorithm
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,7 +15,7 @@ import java.time.ZoneOffset
 
 @RestController
 @RequestMapping("/api/urls")
-class UrlController(@Autowired private val urlService: UrlService){
+class UrlController(@Autowired private val urlService: UrlService, private val appConfiguration: AppConfiguration){
 
     //get all urls
     @GetMapping("")
@@ -21,7 +25,12 @@ class UrlController(@Autowired private val urlService: UrlService){
     //create url
     @PostMapping("")
     fun createUrl(@RequestBody url: Url): ResponseEntity<Url> {
-        val newUrl = urlService.shortenUrl(url, LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli())
+        val algorithm: ShortenAlgorithm = when (appConfiguration.shortenAlgorithm) {
+            "Base62Algorithm" -> Base62Algorithm(appConfiguration)
+            "RandomAlgorithm" -> RandomAlgorithm(appConfiguration)
+            else -> RandomAlgorithm(appConfiguration)
+        }
+        val newUrl = urlService.shortenUrl(url, LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(), algorithm)
         return ResponseEntity(newUrl, HttpStatus.CREATED)
     }
 

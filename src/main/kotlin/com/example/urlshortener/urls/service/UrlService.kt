@@ -4,7 +4,7 @@ import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.datasource.UrlRepository
 import com.example.urlshortener.urls.model.Url
 import org.springframework.stereotype.Service
-
+import com.example.urlshortener.urls.utils.ShortenAlgorithm
 
 @Service
 class UrlService (
@@ -29,14 +29,13 @@ class UrlService (
 
     fun exists(id: Int): Boolean = urlRepository.exists(id)
 
-    fun shortenUrl(url: Url, num: Long): Url {
+    fun shortenUrl(url: Url, num: Long, algorithm: ShortenAlgorithm): Url {
         val existingUrl = urlRepository.retrieveByOriginalUrl(url.originalUrl)
-
         if (existingUrl != null) {
             return existingUrl
         }
 
-        val shortUrl = generateShortUrl(num)
+        val shortUrl = algorithm.generateShortenedUrl(num)
         val newUrl = url.copy(shortUrl=shortUrl)
 
         return urlRepository.createUrl(newUrl)
