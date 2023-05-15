@@ -17,7 +17,6 @@ class Base62AlgorithmTest {
         val expectedUrl = "${appConfiguration.baseBackendUrl}/tDWIctj"
 
         val shortenedUrl = base62Algorithm.generateShortenedUrl(num)
-        println("shortenedUrl for Base62AlgorithmTest: $shortenedUrl")
 
         assertEquals(expectedUrl, shortenedUrl)
     }

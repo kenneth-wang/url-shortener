@@ -36,7 +36,7 @@ class RandomAlgorithm(private val appConfiguration: AppConfiguration) : ShortenA
             sb.append(ALPHABET[randomIndex])
             n /= BASE
         }
-        println("random algo shortened url here: ${sb.reverse()}")
+
         return "${appConfiguration.baseBackendUrl}/${sb.reverse()}"
     }
 }
