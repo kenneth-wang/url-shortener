@@ -3,8 +3,12 @@ package com.example.urlshortener.urls.service
 import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.datasource.UrlRepository
 import com.example.urlshortener.urls.model.Url
+import com.example.urlshortener.urls.utils.Base62Algorithm
+import com.example.urlshortener.urls.utils.RandomAlgorithm
 import org.springframework.stereotype.Service
 import com.example.urlshortener.urls.utils.ShortenAlgorithm
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Service
 class UrlService (
@@ -29,7 +33,17 @@ class UrlService (
 
     fun exists(id: Int): Boolean = urlRepository.exists(id)
 
-    fun shortenUrl(url: Url, num: Long, algorithm: ShortenAlgorithm): Url {
+    fun shortenUrl(url: Url): Url {
+        val algorithm: ShortenAlgorithm = when (appConfiguration.shortenAlgorithm) {
+            "Base62Algorithm" -> Base62Algorithm(appConfiguration)
+            "RandomAlgorithm" -> RandomAlgorithm(appConfiguration)
+            else -> RandomAlgorithm(appConfiguration)
+        }
+        val num = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
+        return generateShortUrl(url, num, algorithm)
+    }
+
+    fun generateShortUrl(url: Url, num: Long, algorithm: ShortenAlgorithm): Url {
         var originalUrl = url.originalUrl.trim()
 
         if (!originalUrl.startsWith("http://") && !originalUrl.startsWith("https://")) {
@@ -46,17 +60,5 @@ class UrlService (
         val newUrl = url.copy(originalUrl=originalUrl, shortUrl=shortUrl)
 
         return urlRepository.createUrl(newUrl)
-    }
-
-    fun generateShortUrl(num: Long): String {
-        val sb = StringBuilder()
-
-        var n = num
-        while (n > 0) {
-            sb.append(ALPHABET[(n % BASE).toInt()])
-            n /= BASE
-        }
-
-        return "${appConfiguration.baseBackendUrl}/${sb.reverse()}"
     }
 }
