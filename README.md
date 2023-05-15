@@ -26,6 +26,7 @@ Here is an illustrated view of the whole process
     cd url-shortener
     docker-compose up --build
     ```
+- Navigate to `localhost` in your browser
 
 ## Steps to deploy on AWS EC2
 The deployment steps are documented as follows:
@@ -42,9 +43,9 @@ The deployment steps are documented as follows:
     ```shell
         git clone https://github.com/kenneth-wang/url-shortener.git
     ```
-- Set these two fields to your public server's DNS:
+- Set these two fields to  `http://<public server's DNS>:8080`:
   - `proxy` under `./frontend/package.json`
-  - `baseBackendUrl` under `src/main/resources/application.yml`
+  - `baseBackendUrl` under `src/main/resources/application-production.yml`
 - Start the app by running the following commands
     ```sh
     cd url-shortener
@@ -54,8 +55,9 @@ The deployment steps are documented as follows:
 ## Tests
 - Integration tests for the APIs can be found under:
   - `src/test/kotlin/com/example/urlshortener/urls/controller`
-- Unit tests for service logic can be found under:
+- Unit tests for service/utils logic can be found under:
   - `src/test/kotlin/com/example/urlshortener/urls/service`
+  - `src/test/kotlin/com/example/urlshortener/urls/utils`
 
 ## Other notes
 - For simplicity:
