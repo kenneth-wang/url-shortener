@@ -7,8 +7,10 @@ interface ShortenAlgorithm {
 }
 
 class Base62Algorithm(private val appConfiguration: AppConfiguration) : ShortenAlgorithm {
-    private val ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    private val BASE = ALPHABET.length
+    companion object {
+        private const val ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        private const val BASE = ALPHABET.length
+    }
 
     override fun generateShortenedUrl(num: Long): String {
         val sb = StringBuilder()
@@ -24,8 +26,10 @@ class Base62Algorithm(private val appConfiguration: AppConfiguration) : ShortenA
 }
 
 class RandomAlgorithm(private val appConfiguration: AppConfiguration) : ShortenAlgorithm {
-    private val ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    private val BASE = ALPHABET.length
+    companion object {
+        private const val ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        private const val BASE = ALPHABET.length
+    }
 
     override fun generateShortenedUrl(num: Long): String {
         val sb = StringBuilder()

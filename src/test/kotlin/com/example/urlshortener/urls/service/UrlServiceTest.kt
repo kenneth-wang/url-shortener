@@ -2,7 +2,7 @@ package com.example.urlshortener.urls.service
 
 import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.controller.TestDatabaseSetup
-import com.example.urlshortener.urls.datasource.DbUrlRepository
+import com.example.urlshortener.urls.datasource.database.DbUrlRepository
 import com.example.urlshortener.urls.datasource.UrlRepository
 import com.example.urlshortener.urls.model.Url
 import com.example.urlshortener.urls.utils.ShortenAlgorithm
@@ -25,7 +25,8 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 class UrlServiceTest @Autowired constructor(
     val dbUrlRepository: DbUrlRepository,
-    val testDatabaseSetup: TestDatabaseSetup
+    val testDatabaseSetup: TestDatabaseSetup,
+    val appConfiguration: AppConfiguration
 ){
 
     @BeforeEach
@@ -34,11 +35,13 @@ class UrlServiceTest @Autowired constructor(
     }
 
     private val urlRepository: UrlRepository = mockk(relaxed = true)
-    private val appConfiguration = AppConfiguration().apply {
-        baseBackendUrl = "http://localhost:8080"
-        shortenAlgorithm = "RandomAlgorithm"
-    }
     private val urlService = UrlService(urlRepository, appConfiguration)
+    private val num = 1683803574249
+    private val originalUrl = "example.com"
+    private val baseBackendUrl = appConfiguration.baseBackendUrl
+    private val shortUrl = "$baseBackendUrl/<shortened_url>"
+    private val newId = 4
+    private val existingId = 1
 
     @Test
     fun getUrls() {
@@ -48,19 +51,19 @@ class UrlServiceTest @Autowired constructor(
 
     @Test
     fun getUrl() {
-        urlService.getUrl(1)
-        verify(exactly=1) { urlRepository.retrieveUrl(1) }
+        urlService.getUrl(existingId)
+        verify(exactly=1) { urlRepository.retrieveUrl(existingId) }
     }
 
     @Test
     fun getUrlByShortUrl() {
-        urlService.getUrlByShortUrl("http://localhost:8080/<shortened_url>")
-        verify(exactly=1) { urlRepository.retrieveByShortUrl("http://localhost:8080/<shortened_url>") }
+        urlService.getUrlByShortUrl(shortUrl)
+        verify(exactly=1) { urlRepository.retrieveByShortUrl(shortUrl) }
     }
 
     @Test
     fun addUrl() {
-        urlService.addUrl(Url(4, "http://localhost:8080/4", "http://localhost:8080/<shortened_url>"))
+        urlService.addUrl(Url(newId, "$baseBackendUrl/$newId", shortUrl))
         verify(exactly=1) {
             urlRepository.createUrl(
                 any()
@@ -70,27 +73,27 @@ class UrlServiceTest @Autowired constructor(
 
     @Test
     fun deleteUrl() {
-        urlService.deleteUrl(1)
-        verify(exactly=1) { urlRepository.deleteUrl(1) }
+        urlService.deleteUrl(existingId)
+        verify(exactly=1) { urlRepository.deleteUrl(existingId) }
     }
 
     @Test
     fun exists() {
-        urlService.exists(1)
-        verify(exactly=1) { urlRepository.exists(1) }
+        urlService.exists(existingId)
+        verify(exactly=1) { urlRepository.exists(existingId) }
     }
 
     @Test
     fun shortenUrl() {
         val shortenAlgorithm = mockk<ShortenAlgorithm>()
 
-        every { shortenAlgorithm.generateShortenedUrl(any()) } returns "http://localhost:8080/shortened-url"
+        every { shortenAlgorithm.generateShortenedUrl(any()) } returns shortUrl
 
-        val originalUrl = "example.com"
+        val modifiedOriginalUrl = "http://$originalUrl"
         val urlService = UrlService(dbUrlRepository, appConfiguration)
-        val url = urlService.shortenUrl(Url(4, originalUrl, null))
+        val url = urlService.shortenUrl(Url(newId, originalUrl, null))
 
-        assertEquals("http://example.com", url.originalUrl)
+        assertEquals(modifiedOriginalUrl, url.originalUrl)
         assertNotNull(url.shortUrl)
     }
 
@@ -98,47 +101,43 @@ class UrlServiceTest @Autowired constructor(
     inner class GenerateShortUrlTests {
         @Test
         fun `generateShortUrl should create new Url object and return it when given url without http or https prefix`() {
-            val num = 1683803574249
             val shortenAlgorithm = mockk<ShortenAlgorithm>()
 
-            every { shortenAlgorithm.generateShortenedUrl(num) } returns "http://localhost:8080/shortened-url"
+            every { shortenAlgorithm.generateShortenedUrl(num) } returns shortUrl
 
-            val originalUrl = "example.com"
             val urlService = UrlService(dbUrlRepository, appConfiguration)
-            val url = urlService.generateShortUrl(Url(4, originalUrl, null), num, shortenAlgorithm)
+            val url = urlService.generateShortUrl(Url(newId, originalUrl, null), num, shortenAlgorithm)
 
-            assertEquals("http://example.com", url.originalUrl)
-            assertEquals("http://localhost:8080/shortened-url", url.shortUrl)
+            assertEquals("http://$originalUrl", url.originalUrl)
+            assertEquals(shortUrl, url.shortUrl)
         }
 
         @Test
         fun `generateShortUrl should create new Url object and return it when given url with extra spaces`() {
-            val num = 1683803574249
             val shortenAlgorithm = mockk<ShortenAlgorithm>()
 
-            every { shortenAlgorithm.generateShortenedUrl(num) } returns "http://localhost:8080/shortened-url"
+            every { shortenAlgorithm.generateShortenedUrl(num) } returns shortUrl
 
-            val originalUrl = "   http://www.example.com   "
+            val originalUrlWithHttp = "   http://$originalUrl   "
             val urlService = UrlService(dbUrlRepository, appConfiguration)
-            val url = urlService.generateShortUrl(Url(4, originalUrl, null), num, shortenAlgorithm)
+            val url = urlService.generateShortUrl(Url(newId, originalUrlWithHttp, null), num, shortenAlgorithm)
 
-            assertEquals("http://www.example.com", url.originalUrl)
+            assertEquals("http://$originalUrl", url.originalUrl)
         }
 
         @Test
         @DirtiesContext
         fun generateShortUrl() {
-            val num = 1683803574249
             val shortenAlgorithm = mockk<ShortenAlgorithm>()
 
-            every { urlRepository.retrieveByOriginalUrl("http://localhost:8080") } returns null
-            every { shortenAlgorithm.generateShortenedUrl(num) } returns "http://localhost:8080/shortened-url"
+            every { urlRepository.retrieveByOriginalUrl("http://$originalUrl") } returns null
+            every { shortenAlgorithm.generateShortenedUrl(num) } returns shortUrl
 
             val urlService = UrlService(urlRepository, appConfiguration)
 
-            urlService.generateShortUrl(Url(4, "http://localhost:8080", null), num, shortenAlgorithm)
+            urlService.generateShortUrl(Url(newId, originalUrl, null), num, shortenAlgorithm)
 
-            verify(exactly = 1) { urlRepository.retrieveByOriginalUrl("http://localhost:8080") }
+            verify(exactly = 1) { urlRepository.retrieveByOriginalUrl("http://$originalUrl") }
             verify(exactly = 1) { shortenAlgorithm.generateShortenedUrl(num) }
         }
     }

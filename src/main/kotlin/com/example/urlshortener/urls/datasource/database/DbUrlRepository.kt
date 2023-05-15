@@ -1,5 +1,6 @@
-package com.example.urlshortener.urls.datasource
+package com.example.urlshortener.urls.datasource.database
 
+import com.example.urlshortener.urls.datasource.UrlRepository
 import com.example.urlshortener.urls.model.Url
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -33,6 +34,4 @@ class DbUrlRepository(@Autowired private val urlCrudRepository: UrlCrudRepositor
     }
 
     override fun exists(id: Int) = urlCrudRepository.existsById(id)
-
-    fun deleteAll() = urlCrudRepository.deleteAll()
 }

@@ -1,9 +1,7 @@
 package com.example.urlshortener.urls.controller
 
-import com.example.urlshortener.urls.configuration.AppConfiguration
 import com.example.urlshortener.urls.model.Url
 import com.example.urlshortener.urls.service.UrlService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,7 +9,11 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/urls")
-class UrlController(@Autowired private val urlService: UrlService, private val appConfiguration: AppConfiguration){
+// Does not need @Autowired as the dependencies are passed to the primary constructor.
+// In Kotlin, if a class has a primary constructor with dependencies
+// declared as primary constructor parameters, Spring can automatically detect and
+// inject the dependencies without the need for @Autowired.
+class UrlController(private val urlService: UrlService){
 
     //get all urls
     @GetMapping("")

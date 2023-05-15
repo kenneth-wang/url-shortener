@@ -19,7 +19,6 @@ class ShortenedUrlControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val testDatabaseSetup: TestDatabaseSetup
 ) {
-
     @BeforeEach
     fun setUp() {
         testDatabaseSetup.loadData()

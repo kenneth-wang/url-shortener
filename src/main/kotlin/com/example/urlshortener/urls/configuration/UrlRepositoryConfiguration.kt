@@ -1,7 +1,7 @@
-package com.example.urlshortener.configuration
+package com.example.urlshortener.urls.configuration
 
-import com.example.urlshortener.urls.datasource.DbUrlRepository
-import com.example.urlshortener.urls.datasource.UrlCrudRepository
+import com.example.urlshortener.urls.datasource.database.DbUrlRepository
+import com.example.urlshortener.urls.datasource.database.UrlCrudRepository
 import com.example.urlshortener.urls.datasource.UrlRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

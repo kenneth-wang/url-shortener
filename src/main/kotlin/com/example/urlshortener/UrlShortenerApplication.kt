@@ -1,6 +1,6 @@
 package com.example.urlshortener
 
-import com.example.urlshortener.configuration.UrlRepositoryConfiguration
+import com.example.urlshortener.urls.configuration.UrlRepositoryConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import

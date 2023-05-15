@@ -1,6 +1,6 @@
 package com.example.urlshortener.urls.controller
 
-import com.example.urlshortener.urls.datasource.DbUrlRepository
+import com.example.urlshortener.urls.datasource.database.DbUrlRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -19,6 +19,11 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
+// Note: Constructor injection requires the @Autowired annotation to indicate that
+// Spring should perform dependency injection for the test dependencies.
+// This is because the test class itself is not managed by Spring,
+// and without the @Autowired annotation, Spring would not be aware that it
+// needs to inject the dependencies into the test class.
 class UrlControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val dbUrlRepository: DbUrlRepository,
@@ -44,7 +49,8 @@ class UrlControllerTest @Autowired constructor(
     @Test
     @DirtiesContext
     fun createUrl() {
-        val json = """{"originalUrl": "http://localhost:8080"}"""
+        val originalUrl = "http://localhost:8080"
+        val json = """{"originalUrl": "$originalUrl"}"""
         mockMvc.post("/api/urls/") {
             contentType = MediaType.APPLICATION_JSON
             content = json
@@ -53,7 +59,7 @@ class UrlControllerTest @Autowired constructor(
                 status { isCreated() }
                 content { contentType(MediaType.APPLICATION_JSON) }
                 jsonPath("$.id") { value(4) }
-                jsonPath("$.originalUrl") { value("http://localhost:8080") }
+                jsonPath("$.originalUrl") { value(originalUrl) }
                 jsonPath("$.shortUrl") { isNotEmpty() }
                 jsonPath("$.createdAt") { isNotEmpty() }
                 jsonPath("$.updatedAt") { isNotEmpty() }
@@ -68,7 +74,7 @@ class UrlControllerTest @Autowired constructor(
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
-                jsonPath("$.id") { value(1) }
+                jsonPath("$.id") { value(id) }
             }
 
         val idNotFound = 0

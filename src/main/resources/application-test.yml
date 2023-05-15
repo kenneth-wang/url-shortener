@@ -11,3 +11,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 baseBackendUrl: http://localhost:8080
 shortenAlgorithm: RandomAlgorithm
+test:
+  dataFilePath: sql/mock_data_file.sql
