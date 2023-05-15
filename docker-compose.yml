@@ -24,6 +24,7 @@ services:
       POSTGRES_USERNAME: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
   test-db:
     container_name: test-db
     image: postgres:12
