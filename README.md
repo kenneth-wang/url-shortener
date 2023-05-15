@@ -54,8 +54,7 @@ The deployment steps are documented as follows:
 ## Tests
 - Integration tests for the APIs can be found under:
   - `src/test/kotlin/com/example/urlshortener/urls/controller`
-- Unit tests for mock classes and service logic can be found under:
-  - `src/test/kotlin/com/example/urlshortener/urls/datasource/mock`
+- Unit tests for service logic can be found under:
   - `src/test/kotlin/com/example/urlshortener/urls/service`
 
 ## Other notes
