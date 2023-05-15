@@ -4,6 +4,7 @@ import com.example.urlshortener.urls.model.Url
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.data.repository.CrudRepository
+import java.time.LocalDateTime
 
 interface UrlCrudRepository : CrudRepository<Url, Int> {
     fun findByOriginalUrl(originalUrl: String): Url?
@@ -23,7 +24,15 @@ class DbUrlRepository(@Autowired private val urlCrudRepository: UrlCrudRepositor
 
     override fun createUrl(url: Url): Url = urlCrudRepository.save(url)
 
-    override fun deleteUrl(id: Int) = urlCrudRepository.deleteById(id)
+    override fun deleteUrl(id: Int) {
+        val url = urlCrudRepository.findById(id).orElse(null)
+        url?.let {
+            it.deletedAt = LocalDateTime.now()
+            urlCrudRepository.save(it)
+        }
+    }
 
     override fun exists(id: Int) = urlCrudRepository.existsById(id)
+
+    fun deleteAll() = urlCrudRepository.deleteAll()
 }

@@ -1,9 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: jdbc:postgresql://localhost:5435/test_database
     password: postgres
     username: postgres
-    schema: classpath:/sql/schema.sql
   jpa:
     hibernate:
       ddl-auto: update

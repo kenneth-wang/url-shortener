@@ -10,10 +10,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_URL: jdbc:postgresql://db:5432/postgres
-      PG_USER: postgres
-      PG_PASSWORD: postgres
-      SPRING_PROFILES_ACTIVE: database
+      SPRING_PROFILES_ACTIVE: production
     depends_on:
       - db
   db:
@@ -27,6 +24,16 @@ services:
       POSTGRES_USERNAME: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
+  test-db:
+    container_name: test-db
+    image: postgres:12
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: test_database
   react-frontend:
     container_name: react-frontend
     image: react-frontend:latest
@@ -36,8 +43,9 @@ services:
     ports:
       - "80:3000"
     environment:
-      DANGEROUSLY_DISABLE_HOST_CHECK: true
+      DANGEROUSLY_DISABLE_HOST_CHECK: "true"
     depends_on:
       - kotlin-app
 volumes:
   pg-data: {}
+  test-pg-data: {}

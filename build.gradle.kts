@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	runtimeOnly("org.postgresql:postgresql")
+	testImplementation("org.dbunit:dbunit:2.7.0")
+	testImplementation("com.github.springtestdbunit:spring-test-dbunit:1.3.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.mockk:mockk:1.10.4")
 }

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS urls (
+  id SERIAL PRIMARY KEY,
+  original_url TEXT NOT NULL,
+  short_url TEXT UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  deleted_at TIMESTAMP
+);
