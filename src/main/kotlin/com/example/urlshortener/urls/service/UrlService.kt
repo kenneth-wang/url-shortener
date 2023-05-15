@@ -30,13 +30,20 @@ class UrlService (
     fun exists(id: Int): Boolean = urlRepository.exists(id)
 
     fun shortenUrl(url: Url, num: Long, algorithm: ShortenAlgorithm): Url {
-        val existingUrl = urlRepository.retrieveByOriginalUrl(url.originalUrl)
+        var originalUrl = url.originalUrl.trim()
+
+        if (!originalUrl.startsWith("http://") && !originalUrl.startsWith("https://")) {
+            // Assume that all websites have http to https redirection
+            originalUrl = "http://$originalUrl"
+        }
+
+        val existingUrl = urlRepository.retrieveByOriginalUrl(originalUrl)
         if (existingUrl != null) {
             return existingUrl
         }
 
         val shortUrl = algorithm.generateShortenedUrl(num)
-        val newUrl = url.copy(shortUrl=shortUrl)
+        val newUrl = url.copy(originalUrl=originalUrl, shortUrl=shortUrl)
 
         return urlRepository.createUrl(newUrl)
     }
